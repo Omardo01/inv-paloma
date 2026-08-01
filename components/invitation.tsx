@@ -163,28 +163,34 @@ export default function Invitation({
             className="h-72 w-52 shrink-0"
           />
           <div>
-            <SectionTitle kicker="Unas palabras" align="left">
-              Hoy cumplo quince
-            </SectionTitle>
+            <SectionTitle align="left">Cumplo quince</SectionTitle>
             <p className="text-[15px] leading-relaxed" style={{ color: theme.mid }}>
               {quince.message}
             </p>
-            <p className="mt-6 text-4xl" style={{ fontFamily: theme.script, color: theme.accentDeep }}>
+            {/* la firma va centrada aunque el bloque de texto sea de bandera */}
+            <p className="mt-6 text-center text-4xl" style={{ fontFamily: theme.script, color: theme.accentDeep }}>
               {quince.name}
             </p>
           </div>
         </div>
       </Section>
 
-      {/* ── Versículo ── */}
+      {/* ── Versículo ──
+          Las estrellas rodean el texto sin taparlo: las grandes van a las
+          esquinas y las chicas se cuelan entre los renglones. */}
       <Section alt className="relative overflow-hidden">
-        <Star i={2} size={54} className="absolute left-8 top-8 opacity-50" rotate={-10} float />
-        <Verse />
+        <StarField count={8} opacity={0.28} />
+        <Star i={2} size={96} className="absolute -left-4 top-6 opacity-70" rotate={-12} float />
+        <Star i={0} size={72} className="absolute -right-3 top-16 opacity-60" rotate={14} float delay={0.3} />
+        <Star i={3} size={40} className="absolute left-10 bottom-10 opacity-65" rotate={8} float delay={0.6} />
+        <Star i={4} size={34} className="absolute right-12 bottom-6 opacity-60" rotate={-16} float delay={0.9} />
+        <Star i={1} size={26} className="absolute left-1/2 top-2 opacity-55" rotate={20} float delay={1.2} />
+        <Verse className="relative z-10" />
       </Section>
 
       {/* ── Dónde ── */}
       <Section className="relative overflow-hidden pb-32">
-        <SectionTitle kicker="Te espero">La fiesta</SectionTitle>
+        <SectionTitle kicker="Te espero en">La fiesta</SectionTitle>
         <Venue />
         <LilyBand className="-bottom-6 opacity-85" height={140} />
       </Section>

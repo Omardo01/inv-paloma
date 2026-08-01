@@ -454,18 +454,23 @@ export function BigDate({ compact = false }: { compact?: boolean }) {
         <span className="h-px flex-1" style={{ background: "var(--q-line)" }} />
       </div>
 
-      <div className={`flex items-baseline gap-4 ${compact ? "my-2" : "my-3"}`}>
+      {/* El número es el ancla visual de toda la invitación: en móvil escala con
+          el ancho (22vw) para que se coma la pantalla sin desbordarla. */}
+      <div className={`flex items-baseline gap-4 ${compact ? "my-2" : "my-5"}`}>
         <span
-          className={`leading-none tabular-nums ${compact ? "text-6xl" : "text-7xl sm:text-8xl"}`}
+          className={`leading-none tabular-nums ${compact ? "text-6xl" : "text-[34vw] sm:text-[13rem]"}`}
           style={{ fontFamily: "var(--q-display)", color: "var(--q-accent-deep)" }}
         >
           {quince.day}
         </span>
         <div className="text-left">
-          <p className={compact ? "text-xl" : "text-2xl"} style={{ fontFamily: "var(--q-script)", color: "var(--q-ink)" }}>
+          <p className={compact ? "text-xl" : "text-5xl sm:text-6xl"} style={{ fontFamily: "var(--q-script)", color: "var(--q-ink)" }}>
             de {quince.month.toLowerCase()}
           </p>
-          <p className="text-[10px] uppercase tracking-[0.25em]" style={{ fontFamily: "var(--q-deco)", color: "var(--q-faint)" }}>
+          <p
+            className={`uppercase tracking-[0.25em] ${compact ? "text-[10px]" : "text-sm"}`}
+            style={{ fontFamily: "var(--q-deco)", color: "var(--q-faint)" }}
+          >
             {quince.year}
           </p>
         </div>
@@ -474,7 +479,7 @@ export function BigDate({ compact = false }: { compact?: boolean }) {
       <div className="flex w-full max-w-md items-center justify-center gap-4">
         <span className="h-px flex-1" style={{ background: "var(--q-line)" }} />
         <span
-          className="text-[10px] uppercase tracking-[0.3em]"
+          className={`uppercase tracking-[0.3em] ${compact ? "text-[10px]" : "text-xs sm:text-sm"}`}
           style={{ fontFamily: "var(--q-deco)", color: "var(--q-mid)" }}
         >
           a las {quince.time}
@@ -495,11 +500,11 @@ export function Verse({ className = "" }: { className?: string }) {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
     >
-      <blockquote className="text-[15px] italic leading-relaxed" style={{ color: "var(--q-mid)" }}>
+      <blockquote className="text-2xl italic leading-relaxed sm:text-[28px]" style={{ fontFamily: "var(--q-body)", color: "var(--q-ink)" }}>
         “{quince.verse.text}”
       </blockquote>
       <figcaption
-        className="mt-4 text-[10px] uppercase tracking-[0.3em]"
+        className="mt-6 text-xs uppercase tracking-[0.3em]"
         style={{ fontFamily: "var(--q-deco)", color: "var(--q-accent-deep)" }}
       >
         {quince.verse.ref}
@@ -550,7 +555,7 @@ export function Venue({ align = "center" }: { align?: "center" | "left" }) {
       transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
     >
       <p className="text-[10px] uppercase tracking-[0.35em]" style={{ fontFamily: "var(--q-deco)", color: "var(--q-accent-deep)" }}>
-        Ubicación
+        Ubicada en
       </p>
       <p className="mt-4 text-2xl leading-snug" style={{ fontFamily: "var(--q-display)" }}>
         {e.place}
@@ -901,7 +906,25 @@ export function RSVP({
 export function Footer({ note }: { note?: string }) {
   return (
     <footer className="border-t px-6 py-12 text-center" style={{ borderColor: "var(--q-line)" }}>
-      <p className="text-5xl leading-none" style={{ fontFamily: "var(--q-script)", color: "var(--q-accent-deep)" }}>
+      {/* la despedida: nombre del salón y dirección, con enlace al mapa */}
+      <p className="mx-auto max-w-sm text-lg leading-relaxed" style={{ fontFamily: "var(--q-display)", color: "var(--q-ink)" }}>
+        Te espero en mi fiesta, ubicada en{" "}
+        <a
+          href={mapsUrl(quince.party.mapsQuery)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4 transition-opacity hover:opacity-70"
+          style={{ color: "var(--q-accent-deep)" }}
+        >
+          {quince.party.place}
+        </a>
+        .
+      </p>
+      <p className="mx-auto mt-3 max-w-xs text-xs leading-relaxed" style={{ color: "var(--q-mid)" }}>
+        {quince.party.address}
+      </p>
+
+      <p className="mt-9 text-5xl leading-none" style={{ fontFamily: "var(--q-script)", color: "var(--q-accent-deep)" }}>
         {quince.name}
       </p>
       <p className="mt-3 text-[10px] uppercase tracking-[0.35em]" style={{ fontFamily: "var(--q-deco)", color: "var(--q-faint)" }}>
