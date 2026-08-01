@@ -170,7 +170,7 @@ export default function AdminPage() {
         {stats && (
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <StatCard label="Invitaciones" value={stats.total} sub={`${stats.totalSeats} lugares`} color={C.card} />
-            <StatCard label="Confirmadas" value={stats.confirmed} sub={`${stats.confirmedSeats} lugares`} color="#f2fbf5" />
+            <StatCard label="Confirmadas" value={stats.confirmed} sub={`${stats.confirmedSeats} asisten`} color="#f2fbf5" />
             <StatCard label="Sin responder" value={stats.pending} color="#fffaf0" />
             <StatCard label="No asisten" value={stats.declined} color="#fdf4f4" />
           </div>
@@ -277,7 +277,10 @@ export default function AdminPage() {
                   <StatusBadge confirmed={g.confirmed} />
                 </div>
                 <p className="mt-1 text-xs" style={{ color: C.mid }}>
-                  {g.seats} {g.seats === 1 ? "lugar" : "lugares"}
+                  {/* si ya respondió, lo que importa es cuántos van de verdad */}
+                  {g.confirmed === 1 && g.attending !== null
+                    ? `Asisten ${g.attending} de ${g.seats}`
+                    : `${g.seats} ${g.seats === 1 ? "lugar" : "lugares"}`}
                   {g.notes ? ` · ${g.notes}` : ""}
                 </p>
                 <p className="mt-0.5 truncate text-[11px]" style={{ color: C.faint }}>

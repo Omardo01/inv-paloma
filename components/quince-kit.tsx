@@ -755,6 +755,7 @@ export function RSVP({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             confirmed: asiste,
+            attending: going,
             notes: asiste ? `Asistirán ${going} de ${seats} lugares` : "No podrá asistir",
           }),
         });

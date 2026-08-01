@@ -14,15 +14,16 @@ export async function POST(req: Request) {
   }
 
   /* Si la base no está lista, decirlo tal cual: sin esto el fallo se ve como
-     «contraseña incorrecta» y se pierde media hora buscando por dónde no es. */
+     «contraseña incorrecta» y se pierde media hora buscando por dónde no es.
+     Se distinguen los dos casos porque se arreglan de forma distinta. */
   let stored: string | null;
   try {
     stored = await getAdminPasswordHash();
   } catch {
-    return NextResponse.json(
-      { error: "La base de datos todavía no está configurada (falta DATABASE_URL y `npm run db:setup`)." },
-      { status: 503 },
-    );
+    const error = process.env.DATABASE_URL
+      ? "Hay conexión a la base, pero faltan las tablas. Corre `npm run db:setup`."
+      : "Falta la variable DATABASE_URL en este entorno.";
+    return NextResponse.json({ error }, { status: 503 });
   }
 
   if (!stored) {

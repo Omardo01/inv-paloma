@@ -5,6 +5,9 @@ import { db } from "./db";
  * con su `slug` — la parte final del enlace que se manda por WhatsApp.
  *
  * `confirmed`: null = todavía no responde, 1 = asiste, 0 = no asiste.
+ * `seats`: los lugares que se le apartaron.
+ * `attending`: cuántos van de verdad, que puede ser menos. Es el número que
+ * importa para la comida y las sillas.
  */
 export type Guest = {
   id: number;
@@ -13,6 +16,7 @@ export type Guest = {
   seats: number;
   phone: string | null;
   confirmed: 1 | 0 | null;
+  attending: number | null;
   confirmed_at: string | null;
   notes: string | null;
   created_at: string;
@@ -100,13 +104,30 @@ export async function deleteGuest(id: number): Promise<void> {
   await sql`DELETE FROM guests WHERE id = ${id}`;
 }
 
-/** Respuesta del invitado desde su propia invitación. */
-export async function confirmRSVP(slug: string, confirmed: boolean, notes?: string): Promise<Guest | null> {
+/**
+ * Respuesta del invitado desde su propia invitación.
+ *
+ * `attending` se limita a los lugares que tiene apartados: nadie puede
+ * apuntar más gente de la que se le invitó. Si dice que no, va en 0.
+ */
+export async function confirmRSVP(
+  slug: string,
+  confirmed: boolean,
+  attending?: number,
+  notes?: string,
+): Promise<Guest | null> {
   const sql = db();
   const now = new Date().toISOString();
   const rows = (await sql`
     UPDATE guests
-    SET confirmed = ${confirmed ? 1 : 0}, confirmed_at = ${now}, notes = ${notes ?? null}
+    SET confirmed = ${confirmed ? 1 : 0},
+        attending = CASE
+          WHEN ${!confirmed} THEN 0
+          WHEN ${attending ?? null}::int IS NULL THEN seats
+          ELSE LEAST(GREATEST(${attending ?? 0}::int, 0), seats)
+        END,
+        confirmed_at = ${now},
+        notes = ${notes ?? null}
     WHERE slug = ${slug}
     RETURNING *
   `) as Guest[];
@@ -122,7 +143,9 @@ export async function getStats(): Promise<Stats> {
       COUNT(*) FILTER (WHERE confirmed = 0)::int               AS declined,
       COUNT(*) FILTER (WHERE confirmed IS NULL)::int           AS pending,
       COALESCE(SUM(seats), 0)::int                             AS "totalSeats",
-      COALESCE(SUM(seats) FILTER (WHERE confirmed = 1), 0)::int AS "confirmedSeats"
+      -- los que asisten de verdad; si alguien confirmó antes de que existiera
+      -- la columna, se cuentan sus lugares apartados
+      COALESCE(SUM(COALESCE(attending, seats)) FILTER (WHERE confirmed = 1), 0)::int AS "confirmedSeats"
     FROM guests
   `) as Stats[];
   return rows[0];

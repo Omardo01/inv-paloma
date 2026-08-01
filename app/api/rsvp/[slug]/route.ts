@@ -8,14 +8,22 @@ import { confirmRSVP } from "@/lib/guests";
  */
 export async function POST(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { confirmed, notes } = (await req.json()) as { confirmed?: boolean; notes?: string };
+  const { confirmed, attending, notes } = (await req.json()) as {
+    confirmed?: boolean;
+    attending?: number;
+    notes?: string;
+  };
 
   if (typeof confirmed !== "boolean") {
     return NextResponse.json({ error: "Falta `confirmed`" }, { status: 400 });
   }
 
-  const guest = await confirmRSVP(slug, confirmed, notes?.slice(0, 300));
+  /* El tope real lo pone la BD contra los lugares apartados; aquí sólo se
+     descarta lo que ni siquiera es un número. */
+  const cuantos = Number.isInteger(attending) ? (attending as number) : undefined;
+
+  const guest = await confirmRSVP(slug, confirmed, cuantos, notes?.slice(0, 300));
   if (!guest) return NextResponse.json({ error: "Invitación no encontrada" }, { status: 404 });
 
-  return NextResponse.json({ ok: true, confirmed: guest.confirmed });
+  return NextResponse.json({ ok: true, confirmed: guest.confirmed, attending: guest.attending });
 }

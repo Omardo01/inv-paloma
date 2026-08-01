@@ -25,6 +25,11 @@ await sql`CREATE TABLE IF NOT EXISTS guests (
   created_at    TEXT NOT NULL DEFAULT (now()::text)
 )`;
 
+/* Cuántos van a asistir de verdad, que no siempre son todos los lugares que se
+   apartaron. NULL mientras no responden; al confirmar se guarda el número.
+   Idempotente: se puede re-ejecutar sobre una base que ya tiene datos. */
+await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS attending INTEGER DEFAULT NULL`;
+
 /* Acceso al panel: la contraseña (hasheada) vive en `settings` y las sesiones
    son tokens opacos con caducidad. */
 await sql`CREATE TABLE IF NOT EXISTS settings (
