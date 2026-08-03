@@ -61,12 +61,15 @@ export const quince = {
     mapsQuery: "Salón de Eventos Aranlú El Cedro Tabasco",
   },
 
-  /* ── quiénes la acompañan — PENDIENTE ── */
+  /* ── quiénes la acompañan ──
+     Los padres ya están; padrinos y corte siguen pendientes. */
   peoplePending: true,
   parents: [
-    { role: "Papá", name: "Por confirmar" },
-    { role: "Mamá", name: "Por confirmar" },
+    { role: "Papá", name: "Daniel Ruiz" },
+    { role: "Mamá", name: "Gladys Domínguez" },
   ],
+  /** La línea tal cual va bajo la carta de Yesenia. */
+  parentsLine: "Junto a mis queridos padres Daniel Ruiz & Gladys Domínguez",
   godparents: [
     { role: "Padrinos de honor", names: "Por confirmar" },
     { role: "Padrinos de vals", names: "Por confirmar" },

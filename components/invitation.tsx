@@ -164,6 +164,16 @@ export default function Invitation({
             <p className="mt-6 text-center text-4xl" style={{ fontFamily: theme.script, color: theme.accentDeep }}>
               {quince.name}
             </p>
+            <motion.p
+              className="mx-auto mt-5 max-w-sm text-center text-lg leading-relaxed sm:text-xl"
+              style={{ fontFamily: theme.body, color: theme.ink }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+            >
+              {quince.parentsLine}
+            </motion.p>
           </div>
         </div>
       </Section>
