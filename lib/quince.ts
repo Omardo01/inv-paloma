@@ -85,18 +85,23 @@ export const quince = {
   ],
 
   /* ── etiqueta ── */
-  dressCode: "Formal",
+  dressCode: "Gala",
   dressCodeNotes: {
-    ellas: "Vestido largo o midi · evitar rosa (reservado para la festejada)",
-    ellos: "Traje o guayabera formal · corbata opcional",
+    ellas: "Vestido largo",
+    ellos: "Traje",
   },
-  /** La paleta que eligió la festejada. */
-  palette: [
-    { name: "Amaranth", hex: "#ffa2b9" },
-    { name: "Cherry blossom", hex: "#ffb2c5" },
-    { name: "Pink", hex: "#ffc2d1" },
-    { name: "Mimi pink", hex: "#fdd5df" },
-    { name: "Lavender blush", hex: "#fae8ed" },
+  /**
+   * Colores reservados para la festejada y su corte: los invitados no los usan.
+   * Son la paleta que mandó la familia (cinco rosas y el plata de glitter).
+   * `glitter` pinta el círculo con textura metálica en vez de color plano.
+   */
+  reservedColors: [
+    { hex: "#f9d8e0" },
+    { hex: "#fbb7c9" },
+    { hex: "#fb9ab5" },
+    { hex: "#fb6f95" },
+    { hex: "#fa3d74" },
+    { hex: "#c8c8cc", glitter: true },
   ],
 
   /* ── regalo ──
@@ -164,48 +169,52 @@ export const quince = {
   /** Ya no hay foto de muestra que acreditar. */
   heroPhotoCredit: null as string | null,
 
-  /** Bloque de vestido rosa: la sesión formal de XV. */
+  /**
+   * Toda la sesión. `v` marca las verticales y `pos` es el `object-position`
+   * cuando el recorte por defecto (centro-alto) deja mal el encuadre.
+   */
   photosVestido: [
-    { src: "/quince/fotos/vestido-01.webp", v: true, alt: "Yesenia con el ramo bajo la pérgola" },
-    { src: "/quince/fotos/vestido-02.webp", v: true, alt: "Retrato con la corona y el ramo" },
-    { src: "/quince/fotos/vestido-03.webp", v: true, alt: "Yesenia bajando las escaleras" },
-    { src: "/quince/fotos/vestido-04.webp", v: false, alt: "Frente al espejo del tocador" },
-    { src: "/quince/fotos/vestido-05.webp", v: true, alt: "El vestido extendido en el jardín" },
-    { src: "/quince/fotos/vestido-06.webp", v: false, alt: "Entre los dos caballos" },
-    { src: "/quince/fotos/vestido-07.webp", v: false, alt: "Bajo la pérgola con los caballos" },
-    { src: "/quince/fotos/vestido-08.webp", v: true, alt: "Yesenia junto al caballo" },
+    { src: "/quince/fotos/vestido-01.webp", v: true, pos: "center 25%", alt: "Yesenia con el ramo bajo la pérgola" },
+    { src: "/quince/fotos/vestido-02.webp", v: true, pos: "center 22%", alt: "Retrato con la corona y el ramo" },
+    { src: "/quince/fotos/vestido-03.webp", v: true, pos: "center 45%", alt: "Yesenia bajando las escaleras" },
+    { src: "/quince/fotos/vestido-04.webp", v: false, pos: "center 45%", alt: "Frente al espejo del tocador" },
+    { src: "/quince/fotos/vestido-05.webp", v: true, pos: "center 45%", alt: "El vestido extendido en el jardín" },
+    { src: "/quince/fotos/vestido-06.webp", v: false, pos: "center 40%", alt: "Entre los dos caballos" },
+    { src: "/quince/fotos/vestido-07.webp", v: false, pos: "center 40%", alt: "Bajo la pérgola con los caballos" },
+    { src: "/quince/fotos/vestido-08.webp", v: true, pos: "center 35%", alt: "Yesenia junto al caballo" },
   ],
 
   /** Bloque casual: chamarra de piel y el Challenger. */
   photosCasual: [
-    { src: "/quince/fotos/casual-01.webp", v: false, alt: "Yesenia junto al auto" },
-    { src: "/quince/fotos/casual-02.webp", v: false, alt: "De perfil frente al auto" },
-    { src: "/quince/fotos/casual-03.webp", v: true, alt: "Recargada en el auto" },
-    { src: "/quince/fotos/casual-04.webp", v: false, alt: "Frente al auto en la entrada" },
-    { src: "/quince/fotos/casual-05.webp", v: true, alt: "Sentada en el cofre" },
-    { src: "/quince/fotos/casual-06.webp", v: false, alt: "El auto y la casa al atardecer" },
-  ],
-
-  /**
-   * Lo que se muestra en la galería. `v` marca las verticales (van en celda
-   * 3:4); las horizontales ocupan la fila completa en 3:2, porque forzarlas al
-   * recorte vertical se come la escena. `pos` es el `object-position` cuando el
-   * encuadre por defecto (centro-alto) deja mal el recorte.
-   */
-  gallery: [
-    { src: "/quince/fotos/vestido-02.webp", v: true, pos: "center 22%", alt: "Retrato con la corona y el ramo" },
-    { src: "/quince/fotos/vestido-05.webp", v: true, pos: "center 45%", alt: "El vestido extendido en el jardín" },
-    { src: "/quince/fotos/vestido-06.webp", v: false, pos: "center 40%", alt: "Entre los dos caballos" },
-    { src: "/quince/fotos/vestido-08.webp", v: true, pos: "center 35%", alt: "Yesenia junto al caballo" },
-    { src: "/quince/fotos/vestido-03.webp", v: true, pos: "center 45%", alt: "Yesenia bajando las escaleras" },
-    { src: "/quince/fotos/vestido-04.webp", v: false, pos: "center 45%", alt: "Frente al espejo del tocador" },
+    { src: "/quince/fotos/casual-01.webp", v: false, pos: "center 45%", alt: "Yesenia junto al auto" },
+    { src: "/quince/fotos/casual-02.webp", v: false, pos: "center 45%", alt: "De perfil frente al auto" },
     { src: "/quince/fotos/casual-03.webp", v: true, pos: "center 30%", alt: "Recargada en el auto" },
+    { src: "/quince/fotos/casual-04.webp", v: false, pos: "center 45%", alt: "Frente al auto en la entrada" },
     { src: "/quince/fotos/casual-05.webp", v: true, pos: "center 30%", alt: "Sentada en el cofre" },
     { src: "/quince/fotos/casual-06.webp", v: false, pos: "center 50%", alt: "El auto y la casa al atardecer" },
   ],
+
+  /** La que acompaña al mensaje de Yesenia; no se repite en la galería. */
+  messagePhoto: "/quince/fotos/vestido-02.webp",
+
 } as const;
 
 export type Quince = typeof quince;
+
+/** Toda la sesión en un solo arreglo, en orden. */
+export const allPhotos = [...quince.photosVestido, ...quince.photosCasual];
+
+/** La foto que acompaña al mensaje de Yesenia. */
+export const messagePhoto = allPhotos.find((p) => p.src === quince.messagePhoto)!;
+
+/**
+ * La galería: todas las fotos menos las que ya salen antes (la portada y la
+ * del mensaje). Se calcula en vez de escribirse a mano para que no se
+ * repitan solas si mañana cambia cuál va arriba.
+ */
+export const galleryPhotos = allPhotos.filter(
+  (p) => p.src !== quince.heroPhoto && p.src !== quince.messagePhoto,
+);
 
 /** Enlace a Google Maps a partir de una consulta de texto. */
 export function mapsUrl(query: string) {

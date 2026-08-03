@@ -95,6 +95,60 @@ export function Lily(props: StickerProps) {
 }
 
 /* ─────────────────────────────────────────────
+   Estrellitas cayendo sobre toda la invitación
+   ───────────────────────────────────────────── */
+
+type Falling = { key: number; left: number; size: number; delay: number; dur: number; rot: number; sway: number; i: number; opacity: number };
+
+/**
+ * Lluvia ambiental de estrellas, como los pétalos de la invitación de la boda.
+ * Va `fixed` sobre todo el documento y no intercepta clics.
+ */
+export function StarRain({ count = 16 }: { count?: number }) {
+  const [stars, setStars] = useState<Falling[]>([]);
+
+  /* sólo en el cliente: los aleatorios romperían la hidratación */
+  useEffect(() => {
+    setStars(
+      Array.from({ length: count }, (_, k) => ({
+        key: k,
+        left: Math.random() * 100,
+        size: 12 + Math.random() * 18,
+        delay: Math.random() * 10,
+        dur: 11 + Math.random() * 10,
+        rot: Math.random() * 360,
+        sway: 20 + Math.random() * 45,
+        i: k % STARS.length,
+        opacity: 0.3 + Math.random() * 0.4,
+      })),
+    );
+  }, [count]);
+
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-40 overflow-hidden">
+      {stars.map((s) => (
+        <motion.div
+          key={s.key}
+          className="absolute"
+          style={{ left: `${s.left}%`, top: "-6%", opacity: s.opacity }}
+          initial={{ y: "-6vh", rotate: s.rot }}
+          animate={{ y: "112vh", x: [0, s.sway, -s.sway, 0], rotate: s.rot + 380 }}
+          transition={{
+            duration: s.dur,
+            delay: s.delay,
+            repeat: Infinity,
+            ease: "linear",
+            x: { duration: s.dur / 2, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" },
+          }}
+        >
+          <Image src={STARS[s.i]} alt="" width={40} height={40} style={{ width: s.size, height: s.size }} />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
    Lluvia de estrellitas de fondo
    ───────────────────────────────────────────── */
 

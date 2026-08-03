@@ -11,7 +11,7 @@
 
 import { motion } from "motion/react";
 import { BlurFade } from "@/components/magic";
-import { PhotoHero, Lily, LilyBand, CornerCluster, Star, StarField } from "@/components/quince-deco";
+import { PhotoHero, Lily, LilyBand, CornerCluster, Star, StarField, StarRain } from "@/components/quince-deco";
 import {
   ThemeScope,
   ScrollProgress,
@@ -27,12 +27,13 @@ import {
   GalleryGrid,
   PhotoFrame,
   MusicToggle,
+  ReservedColors,
   RSVP,
   Footer,
   LetterReveal,
   type Theme,
 } from "@/components/quince-kit";
-import { quince } from "@/lib/quince";
+import { quince, messagePhoto } from "@/lib/quince";
 
 const theme: Theme = {
   bg: "#fffbfc",
@@ -67,23 +68,15 @@ export default function Invitation({
     <ThemeScope theme={theme}>
       <ScrollProgress />
       <MusicToggle />
+      {/* estrellitas cayendo sobre toda la invitación */}
+      <StarRain count={16} />
 
       {/* ── Portada ── */}
       <PhotoHero
         overlay="linear-gradient(to bottom, rgba(95,45,65,0.26) 0%, rgba(130,60,85,0.04) 28%, rgba(110,45,70,0.28) 60%, rgba(150,70,100,0.4) 80%, rgba(255,194,209,0.65) 92%, var(--q-bg) 100%)"
         contentClassName="pb-56 sm:pb-60"
-        decoration={
-          <>
-            {/* estrellas discretas: aquí los lirios de abajo son los
-                protagonistas y no deben competir. */}
-            <StarField count={10} opacity={0.4} />
-            <Star i={0} size={112} className="absolute left-3 top-14 z-10" rotate={-14} opacity={0.85} float delay={0.4} />
-            <Star i={2} size={74} className="absolute right-5 top-24 z-10" rotate={12} opacity={0.8} float delay={0.7} />
-            <Star i={3} size={30} className="absolute left-1/3 top-9 z-10" rotate={-6} float delay={0.9} />
-            <Star i={4} size={24} className="absolute right-1/4 top-48 z-10" rotate={18} float delay={1.1} />
-            <LilyBand className="-bottom-2 z-10" height={185} />
-          </>
-        }
+        /* la portada va limpia: sólo la foto y los lirios */
+        decoration={<LilyBand className="-bottom-2 z-10" height={185} />}
       >
         <BlurFade>
           <p className="text-[11px] uppercase tracking-[0.5em] text-white/90 drop-shadow" style={{ fontFamily: theme.deco }}>
@@ -156,15 +149,15 @@ export default function Invitation({
         <Lily i={4} size={110} className="absolute -right-4 top-4 opacity-60" rotate={12} float />
         <div className="flex flex-col items-center gap-9 sm:flex-row sm:items-start sm:gap-10">
           <PhotoFrame
-            src={quince.photosVestido[1].src}
-            alt={quince.photosVestido[1].alt}
+            src={messagePhoto.src}
+            alt={messagePhoto.alt}
             shape="arch"
             sizes="208px"
             className="h-72 w-52 shrink-0"
           />
           <div>
-            <SectionTitle align="left">Cumplo quince</SectionTitle>
-            <p className="text-[15px] leading-relaxed" style={{ color: theme.mid }}>
+            {/* sin título: el mensaje de Yesenia es el que habla */}
+            <p className="text-xl leading-relaxed sm:text-2xl" style={{ fontFamily: theme.body, color: theme.ink }}>
               {quince.message}
             </p>
             {/* la firma va centrada aunque el bloque de texto sea de bandera */}
@@ -190,15 +183,18 @@ export default function Invitation({
 
       {/* ── Dónde ── */}
       <Section className="relative overflow-hidden pb-32">
-        <SectionTitle kicker="Te espero en">La fiesta</SectionTitle>
+        <SectionTitle kicker="Te espero en">Mi fiesta</SectionTitle>
         <Venue />
         <LilyBand className="-bottom-6 opacity-85" height={140} />
       </Section>
 
-      {/* ── Vestimenta y regalo ── */}
+      {/* ── Vestimenta, regalo y colores reservados ── */}
       <Section alt>
-        <SectionTitle kicker="Dos detalles">Para ese día</SectionTitle>
+        <SectionTitle kicker="Toma nota">Para ese día</SectionTitle>
         <DetailPills />
+        <div className="mt-12">
+          <ReservedColors />
+        </div>
       </Section>
 
       {/* ── Itinerario ── */}

@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import confetti from "canvas-confetti";
-import { quince, mapsUrl, calendarUrl } from "@/lib/quince";
+import { quince, galleryPhotos, mapsUrl, calendarUrl } from "@/lib/quince";
 import { useCountdown } from "@/components/magic";
 
 /* ─────────────────────────────────────────────
@@ -514,10 +514,60 @@ export function Verse({ className = "" }: { className?: string }) {
 }
 
 /** Vestimenta y regalo, como las dos píldoras de la invitación impresa. */
+/**
+ * Los colores que se reserva la festejada. Se dibujan como los círculos de la
+ * paleta que mandó la familia; el último lleva textura de glitter plata.
+ */
+export function ReservedColors() {
+  return (
+    <div className="text-center">
+      <p className="text-[9px] uppercase tracking-[0.3em]" style={{ fontFamily: "var(--q-deco)", color: "var(--q-accent-deep)" }}>
+        Colores reservados
+      </p>
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+        {quince.reservedColors.map((c, i) => (
+          <motion.span
+            key={c.hex}
+            className="block h-11 w-11 rounded-full sm:h-14 sm:w-14"
+            style={{
+              /* el plata se arma por capas: granos claros y oscuros sobre el
+                 gris base, más un brillo diagonal. Plano, como purpurina. */
+              background:
+                "glitter" in c && c.glitter
+                  ? [
+                      "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.95) 0.6px, transparent 1.2px)",
+                      "radial-gradient(circle at 70% 20%, rgba(255,255,255,0.85) 0.5px, transparent 1px)",
+                      "radial-gradient(circle at 45% 65%, rgba(120,120,130,0.7) 0.6px, transparent 1.2px)",
+                      "radial-gradient(circle at 85% 75%, rgba(255,255,255,0.9) 0.5px, transparent 1px)",
+                      "linear-gradient(120deg, #e8e8ee 0%, #b9b9c2 30%, #f2f2f6 50%, #a8a8b2 70%, #dcdce2 100%)",
+                    ].join(", ")
+                  : c.hex,
+              backgroundSize: "5px 5px, 7px 7px, 6px 6px, 8px 8px, 100% 100%",
+              border: "1px solid color-mix(in srgb, var(--q-ink) 8%, transparent)",
+              boxShadow: "0 6px 14px -8px color-mix(in srgb, var(--q-ink) 45%, transparent)",
+            }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ delay: i * 0.08, type: "spring", stiffness: 240, damping: 18 }}
+          />
+        ))}
+      </div>
+      <p className="mx-auto mt-5 max-w-xs text-xs leading-relaxed" style={{ color: "var(--q-mid)" }}>
+        Son los colores de la festejada y su corte. Te pedimos no usarlos.
+      </p>
+    </div>
+  );
+}
+
 export function DetailPills() {
   const rows = [
-    { k: "Código de vestimenta", v: quince.dressCode },
-    { k: quince.gift.title, v: quince.gift.desc },
+    {
+      k: "Código de vestimenta",
+      v: quince.dressCode,
+      sub: `Mujeres, ${quince.dressCodeNotes.ellas.toLowerCase()} · Hombres, ${quince.dressCodeNotes.ellos.toLowerCase()}`,
+    },
+    { k: quince.gift.title, v: quince.gift.desc, sub: undefined as string | undefined },
   ];
   return (
     <div className="mx-auto flex max-w-md flex-col gap-3">
@@ -537,6 +587,11 @@ export function DetailPills() {
           <p className="mt-1 text-lg leading-tight" style={{ fontFamily: "var(--q-display)", color: "var(--q-ink)" }}>
             {r.v}
           </p>
+          {r.sub && (
+            <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--q-mid)" }}>
+              {r.sub}
+            </p>
+          )}
         </motion.div>
       ))}
     </div>
@@ -683,8 +738,10 @@ export function PhotoFrame({
 
 export function GalleryGrid({ shape = "rect" }: { shape?: "rect" | "arch" | "circle" }) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-      {quince.gallery.map((g) => (
+    /* `grid-flow-dense`: las horizontales ocupan la fila entera y dejarían
+       huecos; con flujo denso las verticales suben a rellenarlos. */
+    <div className="grid grid-flow-row-dense grid-cols-2 gap-3 sm:grid-cols-3">
+      {galleryPhotos.map((g) => (
         <PhotoFrame
           key={g.src}
           src={g.src}
