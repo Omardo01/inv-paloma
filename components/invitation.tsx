@@ -165,14 +165,18 @@ export default function Invitation({
               {quince.name}
             </p>
             <motion.p
-              className="mx-auto mt-5 max-w-sm text-center text-lg leading-relaxed sm:text-xl"
+              className="mt-5 text-center text-lg leading-relaxed sm:text-xl"
               style={{ fontFamily: theme.body, color: theme.ink }}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.7, delay: 0.15 }}
             >
-              {quince.parentsLine}
+              {/* dos renglones fijos: el saludo arriba y, más grande, los nombres */}
+              <span className="block">{quince.parentsLine.intro}</span>
+              <span className="mt-1 block text-2xl sm:text-3xl" style={{ fontFamily: theme.display }}>
+                {quince.parentsLine.names}
+              </span>
             </motion.p>
           </div>
         </div>

@@ -68,8 +68,11 @@ export const quince = {
     { role: "Papá", name: "Daniel Ruiz" },
     { role: "Mamá", name: "Gladys Domínguez" },
   ],
-  /** La línea tal cual va bajo la carta de Yesenia. */
-  parentsLine: "Junto a mis queridos padres Daniel Ruiz & Gladys Domínguez",
+  /** Lo que va bajo la carta de Yesenia, en dos renglones fijos. */
+  parentsLine: {
+    intro: "Junto a mis queridos padres",
+    names: "Daniel Ruiz & Gladys Domínguez",
+  },
   godparents: [
     { role: "Padrinos de honor", names: "Por confirmar" },
     { role: "Padrinos de vals", names: "Por confirmar" },
